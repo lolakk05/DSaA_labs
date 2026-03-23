@@ -193,8 +193,8 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
 
 	@Override
 	public E get(int index) {
-        if(index < 0 || index >= size) {
-            throw new NoSuchElementException();
+        if(checkIndex(index)) {
+             throw new NoSuchElementException();
         }
 		Element current = head;
         for(int i = 0; i < index; i++) {
@@ -205,7 +205,7 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
 
 	@Override
 	public E set(int index, E element) {
-        if (index < 0 || index >= size) {
+        if(checkIndex(index)) {
             throw new NoSuchElementException();
         }
 		Element current = head;
@@ -246,7 +246,9 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
 
     @Override
     public E remove(int index) {
-        if (index < 0 || index >= size) throw new NoSuchElementException();
+        if(checkIndex(index)) {
+            throw new NoSuchElementException();
+        }
 
         Element toRemove;
         if (index == 0) {
@@ -317,5 +319,9 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
 
         other.clear();
 	}
+
+    public boolean checkIndex(int index) {
+        return index < 0 || index >= size;
+    }
 }
 
