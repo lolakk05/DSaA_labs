@@ -8,17 +8,24 @@ import java.util.NoSuchElementException;
 public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
 	
 	private class Element{
-		public Element(E e) {
-			this.object = e;
-		}
-		E object;
-		Element next=null;
-		Element prev=null;
+        E object;
+        Element next=null;
+        Element prev=null;
+
+        public Element(E e) {
+            this.object=e;
+        }
+
+        public Element(E e, Element next, Element prev) {
+            this.object=e;
+            this.next=next;
+            this.prev=prev;
+        }
 	}
 	
 	Element head;
 	Element tail;
-	int size;
+	int size = 0;
 	
 	private class InnerIterator implements Iterator<E>{
 		Element pos;
@@ -34,7 +41,7 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
 		@Override
 		public E next() {
 			if(pos == null) {
-                throw new java.util.NoSuchElementException();
+                throw new NoSuchElementException();
             }
             E e = pos.object;
             pos = pos.next;
@@ -80,10 +87,10 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
             return e;
 		}
 
-		@Override
-		public int nextIndex() {
-            return index++;
-		}
+        @Override
+        public int nextIndex() {
+            throw new UnsupportedOperationException();
+        }
 
 		@Override
 		public E previous() {
@@ -97,10 +104,10 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
             return e;
 		}
 
-		@Override
-		public int previousIndex() {
-            return index--;
-		}
+        @Override
+        public int previousIndex() {
+            throw new UnsupportedOperationException();
+        }
 
 		@Override
 		public void remove() {
@@ -138,7 +145,7 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
 	@Override
 	public void add(int index, E element) {
 		if(index < 0 || index > size) {
-            throw new IndexOutOfBoundsException();
+            throw new NoSuchElementException();
         }
         Element newElement = new Element(element);
         if(index == 0) {
@@ -174,21 +181,21 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
         size = 0;
 	}
 
-	@Override
-	public boolean contains(E element) {
-		Element current = head;
-        //może foreach?
-        while(current != element) {
+    @Override
+    public boolean contains(E element) {
+        Element current = head;
+        while (current != null) {
+            if (current.object.equals(element)) return true;
             current = current.next;
-            if(current == element) {
-                return true;
-            }
         }
         return false;
-	}
+    }
 
 	@Override
 	public E get(int index) {
+        if(index < 0 || index >= size) {
+            throw new NoSuchElementException();
+        }
 		Element current = head;
         for(int i = 0; i < index; i++) {
             current = current.next;
@@ -199,7 +206,7 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
 	@Override
 	public E set(int index, E element) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
+            throw new NoSuchElementException();
         }
 		Element current = head;
         for(int i = 0; i < index; i++) {
@@ -224,10 +231,7 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
 
 	@Override
 	public boolean isEmpty() {
-		if(head == null && tail == null) {
-            return true;
-        }
-        return false;
+		return size == 0;
 	}
 
 	@Override
@@ -240,48 +244,45 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public E remove(int index) {
-        if(index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index out of bounds");
-        }
-        if(index == 0) {
-            E result = head.object;
-            head = head.next;
-            head.prev = null;
-            size--;
-            return result;
-        } else if(index == size-1) {
-            E result = tail.object;
-            tail = tail.prev;
-            tail.next = null;
-            size--;
-            return result;
-        }
-        Element current = head;
-        for(int i = 0; i < index; i++) {
-            current = current.next;
-        }
-        E result = current.object;
-        current.prev.next = current.next;
-        current.next.prev = current.prev;
-        size--;
-        return result;
-	}
+    @Override
+    public E remove(int index) {
+        if (index < 0 || index >= size) throw new NoSuchElementException();
 
-	@Override
-	public boolean remove(E e) {
+        Element toRemove;
+        if (index == 0) {
+            toRemove = head;
+            head = head.next;
+            if (head != null) head.prev = null;
+            else tail = null;
+        } else if (index == size - 1) {
+            toRemove = tail;
+            tail = tail.prev;
+            if (tail != null) tail.next = null;
+            else head = null;
+        } else {
+            toRemove = head;
+            for (int i = 0; i < index; i++) toRemove = toRemove.next;
+            toRemove.prev.next = toRemove.next;
+            toRemove.next.prev = toRemove.prev;
+        }
+        size--;
+        return toRemove.object;
+    }
+
+    @Override
+    public boolean remove(E e) {
         Element current = head;
-        for(int i = 0; i < size; i++) {
+        int indexToDrop = 0;
+        while(current != null) {
             if(current.object.equals(e)) {
-                current.prev.next = current.next;
-                current.next.prev = current.prev;
+                remove(indexToDrop);
                 return true;
             }
             current = current.next;
+            indexToDrop++;
         }
         return false;
-	}
+    }
 
 	@Override
 	public int size() {
