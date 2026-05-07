@@ -1,12 +1,12 @@
 package List3;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 
-public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
-	
+public class TwoWayUnorderedListWithHeadAndTail<E extends Comparable<E>> implements IList<E> {
 	private class Element{
         E object;
         Element next=null;
@@ -123,13 +123,30 @@ public class TwoWayUnorderedListWithHeadAndTail<E> implements IList<E>{
 	@Override
 	public boolean add(E e) {
 		Element newElement = new Element(e);
-        if(head == null) {
+        Element current = head;
+        if(current == null) {
             head = newElement;
             tail = newElement;
-        } else {
+            size++;
+            return true;
+        }
+        if(newElement.object.compareTo(tail.object) >= 0) {
             tail.next = newElement;
             newElement.prev = tail;
             tail = newElement;
+            size++;
+            return true;
+        }
+        while(current != null) {
+            if(newElement.object.compareTo(current.object) >= 0 && newElement.object.compareTo(current.next.object) < 0) {
+                newElement.next = current.next;
+                newElement.prev = current;
+                current.next.prev = newElement;
+                current.next = newElement;
+                size++;
+                return true;
+            }
+            current = current.next;
         }
         size++;
         return true;

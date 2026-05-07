@@ -86,7 +86,7 @@ public class OneWayLinkedList<E> implements IList<E>{
 
 	@Override
 	public E get(int index)  {
-		if(checkIfIndexRight(index)) {
+		if(checkIndex(index)) {
             throw new NoSuchElementException();
         }
         Element current = getElement(sentinel.next, index);
@@ -95,7 +95,7 @@ public class OneWayLinkedList<E> implements IList<E>{
 
 	@Override
 	public E set(int index, E element) throws NoSuchElementException {
-		if(checkIfIndexRight(index)) {
+		if(checkIndex(index)) {
             throw new NoSuchElementException();
         }
         Element current = getElement(sentinel.next, index);
@@ -125,7 +125,7 @@ public class OneWayLinkedList<E> implements IList<E>{
 
 	@Override
 	public E remove(int index)  {
-		if(checkIfIndexRight(index)) {
+		if(checkIndex(index)) {
             throw new NoSuchElementException();
         }
         Element previous = getElement(sentinel, index);
@@ -154,7 +154,7 @@ public class OneWayLinkedList<E> implements IList<E>{
 		return size;
 	}
 
-    public boolean checkIfIndexRight(int index) {
+    public boolean checkIndex(int index) {
         return index < 0 || index >= size;
     }
 

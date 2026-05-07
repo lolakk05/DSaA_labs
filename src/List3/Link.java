@@ -1,6 +1,6 @@
 package List3;
 
-public class Link{
+public class Link implements Comparable<Link>{
     public String ref;
     public Link(String ref) {
         this.ref=ref;
@@ -19,4 +19,15 @@ public class Link{
         }
         return false;
     }
+
+    @Override
+    public int compareTo(Link o) {
+        return this.getSize() - o.getSize();
+    }
+
+    public int getSize() {
+        return this.ref.length();
+    }
+
+
 }
