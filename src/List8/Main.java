@@ -1,28 +1,15 @@
 package List8;
 import java.util.*;
 
-
-
-
-
 public class Main {
-
-
-
-
 	static Scanner scan; // for input stream
-
-
-
-
-
 	public static void main(String[] args) {
 		System.out.println("START");
 		scan=new Scanner(System.in);
-		HashTable hashTable=new HashTable(8);
+		HashTable<Document> hashTable=new HashTable<>(8);
 		Document currentDoc=null;
 		boolean halt=false;
-		while(!halt) {
+		while(!halt && scan.hasNextLine()) {
 			String line=scan.nextLine();
 			// empty line and comment line - read next line
 			if(line.length()==0 || line.charAt(0)=='#')
@@ -32,7 +19,7 @@ public class Main {
 			String word[]=line.split(" ");
 			//getdoc name - change document to name 
 			if(word[0].equalsIgnoreCase("getdoc") && word.length==2) {
-				currentDoc=(Document)hashTable.get(new Document(word[1]));				
+				currentDoc= (Document) hashTable.get(new Document(word[1]));
 				continue;
 			}
 

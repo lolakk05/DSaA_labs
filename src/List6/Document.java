@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Document implements IWithName{
 	public String name;
 	public TwoWayCycledOrderedListWithSentinel<Link> link;
-    public final int MOD_VALUE= 10;
+    public final int MOD_VALUE= 100000000;
 	public Document(String name) {
 		this.name = name;
 	}
@@ -148,16 +148,15 @@ public class Document implements IWithName{
     }
 
     public int hashCode() {
-//        int[] data = {7, 11, 13, 17, 19};
-//        char[] name = this.getName().toCharArray();
-//        int sum = name[0];
-//        for(int i = 1; i < this.getSize(); i++) {
-//            int number = data[(i - 1) % data.length];
-//            sum = (sum * number + name[i]);
-//            sum %= MOD_VALUE;
-//        }
-//        return sum;
-        return this.getName().length();
+        int[] data = {7, 11, 13, 17, 19};
+        char[] name = this.getName().toCharArray();
+        int sum = name[0];
+        for(int i = 1; i < this.getSize(); i++) {
+            int number = data[(i - 1) % data.length];
+            sum = (sum * number + name[i]);
+            sum %= MOD_VALUE;
+        }
+        return sum;
     }
 
     @Override

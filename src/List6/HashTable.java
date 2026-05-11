@@ -32,8 +32,6 @@ public class HashTable {
         this.arr[index].add(elem);
         this.size++;
 
-        optimize();
-
         return true;
     }
 
@@ -54,7 +52,6 @@ public class HashTable {
             }
         }
     }
-
 
     public void optimize() {
         int[] maxBucketValues = getLongestBucket();
