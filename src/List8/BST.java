@@ -19,6 +19,7 @@ public class BST<T extends Comparable<T>>{
 	}		
 	private Node root=null;
     private int size = 0;
+    private int addComparasions = 0;
 
 	public BST() {
 	}
@@ -129,8 +130,10 @@ public class BST<T extends Comparable<T>>{
         }
 
         Node current = root;
+        int currentComparasions = 0;
         while (current != null) {
             int compareResult = elem.compareTo(current.value);
+            currentComparasions++;
             if (compareResult == 0) {
                 return false;
             }
@@ -138,6 +141,7 @@ public class BST<T extends Comparable<T>>{
                 if (current.left == null) {
                     current.left = new Node(elem, null, null, current);
                     size++;
+                    addComparasions = currentComparasions;
                     return true;
                 }
                 current = current.left;
@@ -145,6 +149,7 @@ public class BST<T extends Comparable<T>>{
                 if (current.right == null) {
                     current.right = new Node(elem, null, null, current);
                     size++;
+                    addComparasions = currentComparasions;
                     return true;
                 }
                 current = current.right;
@@ -195,5 +200,9 @@ public class BST<T extends Comparable<T>>{
 	public int size() {
 		return this.size;
 	}
+
+    public int getAddComparasions() {
+        return this.addComparasions;
+    }
 
 }
